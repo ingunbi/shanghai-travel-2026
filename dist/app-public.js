@@ -23,20 +23,15 @@
 
   const todayParts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
   const today = ['year','month','day'].map(type => todayParts.find(part => part.type === type).value).join('-');
-  const dateNumber = value => Date.parse(`${value}T00:00:00+09:00`);
-  const start = meta.startDate || '2026-10-27';
-  const end = meta.endDate || '2026-11-01';
-  const difference = Math.round((dateNumber(start) - dateNumber(today)) / 86400000);
-  $('#departure-count').textContent = difference > 0 ? `출발 D−${difference}` : difference === 0 ? '오늘, 상하이로' : today <= end ? `여행 ${Math.abs(difference) + 1}일째` : '다음 장면을 추억하며';
 
   if (meta.title) $('#hero-title').textContent = meta.title;
+  if (meta.subtitle) $('#hero-dek').textContent = meta.subtitle;
   if (meta.heroImage) $('#hero-image').src = meta.heroImage;
   if (meta.heroCaption) $('#hero-caption').textContent = meta.heroCaption;
   if (meta.heroCredit && url(meta.heroSourceUrl)) {
     $('#hero-credit').href = url(meta.heroSourceUrl);
     $('#hero-credit').textContent = `${meta.heroCredit} ↗`;
   }
-  if (data.notes?.plan) $('.plan-state strong').textContent = data.notes.plan;
   if (data.notes?.assumption) {
     const note = document.createElement('p');
     note.className = 'creator-assumption';
@@ -101,13 +96,12 @@
   </div>`;
   const photoStoryHTML = (day, chapters, inDiary = false) => {
     if (!chapters.length) return '';
-    const heading = inDiary ? 'h5' : 'h4';
     const contents = chapters.map(chapter => {
       const time = chapter.time ? `<span>사진 ${esc(chapter.time)}</span>` : '';
       const note = !inDiary && chapter.text ? `<p>${esc(chapter.text)}</p>` : '';
       const gallery = photoGridHTML(array(chapter.photos), `${day.label} ${chapter.title} 사진`);
       return `<div class="story-chapter">
-        <${heading}>${time}${esc(chapter.title)}</${heading}>
+        <h4>${time}${esc(chapter.title)}</h4>
         ${note}${gallery}
       </div>`;
     }).join('');
@@ -123,8 +117,7 @@
     const chapters = array(day.photoStory);
     const hasPlacement = chapter => Number.isInteger(chapter.afterParagraph) &&
       chapter.afterParagraph >= 1 && chapter.afterParagraph <= paragraphs.length;
-    const diary = paragraphs.length ? `<section class="day-diary" aria-label="${esc(day.label)} 일기">
-      <h4>이날의 일기</h4>
+    const diary = paragraphs.length ? `<section class="day-diary" aria-label="${esc(day.label)} 이야기">
       ${paragraphs.map((paragraph, index) => {
         const photos = chapters.filter(chapter => chapter.afterParagraph === index + 1);
         return `<p>${esc(paragraph)}</p>${photoStoryHTML(day, photos, true)}`;
@@ -260,9 +253,48 @@
     if (afterTripLink) afterTripLink.hidden = false;
   }
 
-  const dayHTML = (day,index,print = false) => {
-    if (print) return fullDayHTML(day,index,true);
-    return `<div class="compact-day-header"><p class="eyebrow">DAY ${String(index + 1).padStart(2,'0')} · ${esc(day.label)} ${esc(day.weekday)}</p><h3>${esc(day.displayTitle || day.title)}</h3><p>${esc(day.displaySummary || day.summary)}</p></div>${dayNarrativeHTML(day)}<ol class="compact-timeline" aria-label="${esc(day.label)} 핵심 일정">${array(day.stops).filter(stop=>!stop.secondary).map(compactStopHTML).join('')}</ol><details class="day-more"><summary>이동 기록·개인 메모</summary><div class="day-more-body">${array(day.stops).some(stop=>stop.secondary) ? `<ol class="compact-timeline secondary-stops" aria-label="추가 준비·조건부 일정">${array(day.stops).filter(stop=>stop.secondary).map(compactStopHTML).join('')}</ol>` : ''}<p>${esc(day.summary)}</p>${array(day.focus).length ? `<ul class="day-focus" aria-label="오늘의 핵심과 선택 일정">${day.focus.map(item => `<li>${esc(item)}</li>`).join('')}</ul>` : ''}${day.mealNote ? `<p class="day-meal-note"><strong>식사 기록</strong>${esc(day.mealNote)}</p>` : ''}${array(day.route).length ? `<p class="day-route">${day.route.map(esc).join(' → ')}</p>` : ''}${day.travelNote || day.weatherPlan ? `<div class="day-small-note">${day.travelNote ? `<strong>이동 기록</strong>${esc(day.travelNote)}` : ''}${day.weatherPlan ? `<div class="weather-note"><strong>날씨</strong>${esc(day.weatherPlan)}</div>` : ''}</div>` : ''}<div class="day-note"><label for="daily-note">오늘의 작은 메모<span>이 브라우저에 자동 저장</span></label><textarea id="daily-note" data-note-date="${esc(day.date)}" placeholder="그날의 장면, 함께 먹은 것, 기억해 둘 이야기…" aria-label="${esc(day.label)} 여행 메모">${esc(saved.notes[day.date] || '')}</textarea></div></div></details>`;
+  const storyTitle = day => day.feature?.title || day.displayTitle || day.title;
+
+  const dayHTML = (day, index, print = false) => {
+    if (print) return fullDayHTML(day, index, true);
+    const stops = array(day.stops);
+    const primary = stops.filter(stop => !stop.secondary);
+    const secondary = stops.filter(stop => stop.secondary);
+    const next = days[index + 1];
+    let continuation = '';
+    if (next) {
+      continuation = `<button class="feature-next" type="button" data-select-day="${index + 1}">
+        <span>다음 이야기</span><strong>${esc(storyTitle(next))} ↘</strong>
+      </button>`;
+    } else if (afterTripEntries.length) {
+      continuation = `<a class="feature-next" href="#after-trip">
+        <span>에필로그</span><strong>돌아와서 남은 이야기 ↘</strong>
+      </a>`;
+    }
+
+    return `<header class="feature-chapter-header">
+      <p class="feature-kicker">STORY ${String(index + 1).padStart(2, '0')} / ${esc(day.label)} ${esc(day.weekday)}</p>
+      <h3>${esc(storyTitle(day))}</h3>
+      <p class="feature-dek">${esc(day.feature?.dek || day.displaySummary || day.summary)}</p>
+    </header>
+    ${dayNarrativeHTML(day)}
+    ${continuation}
+    <details class="day-more feature-reference">
+      <summary>이날의 동선과 메모</summary>
+      <div class="day-more-body">
+        ${primary.length ? `<ol class="compact-timeline" aria-label="${esc(day.label)} 핵심 일정">${primary.map(compactStopHTML).join('')}</ol>` : ''}
+        ${secondary.length ? `<ol class="compact-timeline secondary-stops" aria-label="추가 준비·조건부 일정">${secondary.map(compactStopHTML).join('')}</ol>` : ''}
+        <p>${esc(day.summary)}</p>
+        ${array(day.focus).length ? `<ul class="day-focus" aria-label="오늘의 핵심과 선택 일정">${day.focus.map(item => `<li>${esc(item)}</li>`).join('')}</ul>` : ''}
+        ${day.mealNote ? `<p class="day-meal-note"><strong>식사 기록</strong>${esc(day.mealNote)}</p>` : ''}
+        ${array(day.route).length ? `<p class="day-route">${day.route.map(esc).join(' → ')}</p>` : ''}
+        ${day.travelNote || day.weatherPlan ? `<div class="day-small-note">${day.travelNote ? `<strong>이동 기록</strong>${esc(day.travelNote)}` : ''}${day.weatherPlan ? `<div class="weather-note"><strong>날씨</strong>${esc(day.weatherPlan)}</div>` : ''}</div>` : ''}
+        <div class="day-note">
+          <label for="daily-note">오늘의 작은 메모<span>이 브라우저에 자동 저장</span></label>
+          <textarea id="daily-note" data-note-date="${esc(day.date)}" placeholder="그날의 장면, 함께 먹은 것, 기억해 둘 이야기…" aria-label="${esc(day.label)} 여행 메모">${esc(saved.notes[day.date] || '')}</textarea>
+        </div>
+      </div>
+    </details>`;
   };
 
   let activeDay = Math.max(0, days.findIndex(day => day.date === today));
@@ -289,7 +321,11 @@
     $('#itinerary').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',block:'start'});
   });
   if (days.length) {
-    $('#day-tabs').innerHTML = days.map((day,index) => `<button class="day-tab" type="button" role="tab" id="day-tab-${index}" aria-controls="day-panel" aria-selected="${index === activeDay}" tabindex="${index === activeDay ? 0 : -1}" data-day="${index}"><span class="day-tab-top"><span>DAY ${String(index + 1).padStart(2,'0')}</span><span>${esc(day.weekday)}</span></span><span class="day-tab-date">${esc(day.label)}</span><span class="day-tab-label">${esc(day.shortArea || day.area)}</span>${day.date === today ? '<span class="day-tab-today">TODAY</span>' : ''}</button>`).join('');
+    $('#day-tabs').innerHTML = days.map((day, index) => `<button class="day-tab" type="button" role="tab" id="day-tab-${index}" aria-controls="day-panel" aria-selected="${index === activeDay}" tabindex="${index === activeDay ? 0 : -1}" data-day="${index}">
+      <span class="feature-tab-number">${String(index + 1).padStart(2, '0')}</span>
+      <span class="feature-tab-title">${esc(day.feature?.indexTitle || day.shortArea || day.area)}</span>
+      <span class="feature-tab-date">${esc(day.label)}</span>
+    </button>`).join('');
     $('#day-overview').innerHTML = days.map((day,index) => `<button class="overview-row" type="button" data-select-day="${index}" aria-label="${esc(day.label)} ${esc(day.title)} 일정 보기"><span class="overview-number">${String(index + 1).padStart(2,'0')}</span><span class="overview-date">${esc(day.label)} ${esc(day.weekday)}</span><span class="overview-title">${esc(day.title)}</span><span class="overview-area">${esc(day.area)}</span><span class="overview-arrow" aria-hidden="true">↗</span></button>`).join('');
     $('#print-days').innerHTML = days.map((day,index) => `<article class="print-day">${dayHTML(day,index,true)}</article>`).join('');
     setDay(activeDay);
@@ -307,12 +343,18 @@
     const index = event.key === 'Home' ? 0 : event.key === 'End' ? days.length - 1 : (activeDay + (event.key === 'ArrowRight' ? 1 : -1) + days.length) % days.length;
     setDay(index,true);
   });
-  $('#day-overview').addEventListener('click', event => {
-    const row = event.target.closest('[data-select-day]');
-    if (!row) return;
-    setDay(Number(row.dataset.selectDay));
-    $('#itinerary').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',block:'start'});
-  });
+  const selectStory = event => {
+    const button = event.target.closest('[data-select-day]');
+    if (!button) return;
+    const index = Number(button.dataset.selectDay);
+    if (!days[index]) return;
+    setDay(index);
+    const destination = event.currentTarget.id === 'day-panel' ? $('#day-panel') : $('#itinerary');
+    if (destination.id === 'day-panel') destination.focus({ preventScroll: true });
+    destination.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  };
+  $('#day-overview').addEventListener('click', selectStory);
+  $('#day-panel').addEventListener('click', selectStory);
   $('#day-panel').addEventListener('input', event => {
     if (!event.target.matches('[data-note-date]')) return;
     saved.notes[event.target.dataset.noteDate] = event.target.value;

@@ -5,59 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f8f7f3">
   <meta name="robots" content="noindex, nofollow, noarchive">
-  <meta name="description" content="두 사람의 상하이 5박 6일. 전망대와 야경, 예원의 한푸, 골목과 로스터리를 찾아간 여행의 기록.">
-  <title>상하이 2026 — 두 사람의 여행일지</title>
+  <meta name="description" content="황푸강의 양쪽, 낮과 밤의 예원, 티엔즈팡의 골목. 인권과 연주가 상하이에서 보낸 여섯 날을 담은 여행 특집.">
+  <title>상하이 2026 — 강을 건너, 골목에 머물다</title>
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-  <link rel="stylesheet" href="styles.css?v=20261107-photo-viewer-fit">
-  <script src="data-public.js?v=20261107-diary-scenes" defer></script>
-  <script src="app-public.js?v=20261107-photo-viewer-fit" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261107-travel-feature">
+  <script src="data-public.js?v=20261107-travel-feature" defer></script>
+  <script src="app-public.js?v=20261107-travel-feature" defer></script>
   <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="journey-map.js?v=20261105-story" defer></script>
 </head>
-<body>
-  <a class="skip-link" href="#itinerary">여행 기록으로 바로가기</a>
+<body class="travel-feature">
+  <a class="skip-link" href="#itinerary">여행 특집으로 바로가기</a>
   <header class="site-header">
     <div class="header-inner">
-      <a class="wordmark" href="#top" aria-label="상하이 여행 노트 처음으로">S / 26<span>TRAVEL NOTES</span></a>
-      <nav aria-label="주요 메뉴"><a href="#itinerary">기록</a><a href="#journey-map">지도</a><a href="#travel-essentials">준비 기록</a></nav>
+      <a class="wordmark" href="#top" aria-label="상하이 2026 표지로">S / 26<span>SHANGHAI</span></a>
+      <nav aria-label="주요 메뉴"><a href="#itinerary">특집</a><a href="#journey-map">지도</a><a href="#travel-essentials">여행 노트</a></nav>
       <button class="print-button" id="print-button" type="button" aria-label="6일 전체 여행 일정 인쇄 또는 PDF 저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 9V3h12v6M6 17H3V9h18v8h-3M6 14h12v7H6z"/><path d="M17 12h1"/></svg><span>PDF / 인쇄</span></button>
     </div>
   </header>
 
   <main id="top">
-<section class="hero page-width" aria-labelledby="hero-title">
-      <div class="hero-edition"><span>SIX DAYS IN SHANGHAI</span><span>CHINA · 31°13′ N 121°28′ E</span></div>
-      <div class="masthead" aria-label="Shanghai 2026"><span>SHANGHAI</span><span class="masthead-year">’26</span></div>
-      <div class="hero-layout">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="red-dot"></span> 두 사람의 도시 탐험</p>
-          <h1 id="hero-title">상하이, 우리만의 6일</h1>
-          <p class="hero-description">전망대와 야경, 한푸, 골목 산책과 맛있는 한 끼.</p>
-          <div class="hero-tripline"><span>2026. 10. 27 <i>—</i> 11. 01</span><span>5 NIGHTS · 6 DAYS</span></div>
-          <div class="hero-actions"><a class="button primary" href="#itinerary">여행 이야기 읽기 <span aria-hidden="true">↗</span></a><span id="departure-count" class="countdown">다녀온 여행</span></div>
-          <div class="plan-state"><span class="state-mark" aria-hidden="true">○</span><div><strong>다녀온 기록</strong><span>실제로 간 곳과 직접 찍은 사진으로 정리했어요.</span></div></div>
+    <section class="feature-cover page-width" aria-labelledby="hero-title">
+      <div class="feature-edition"><span>상하이 2026</span><span>TRAVEL FEATURE / VOL. 01</span></div>
+      <div class="feature-cover-grid">
+        <div class="feature-cover-copy">
+          <p class="feature-kicker">중국 상하이 · 5박 6일</p>
+          <h1 id="hero-title">강을 건너, 골목에 머물다</h1>
+          <p id="hero-dek" class="feature-cover-dek">118층에서 바라본 황푸강, 불이 켜진 예원, 징안의 마지막 밤. 인권과 연주가 상하이에서 보낸 여섯 날.</p>
+          <a class="feature-cover-link" href="#itinerary">특집 읽기 <span aria-hidden="true">↘</span></a>
         </div>
-        <figure class="hero-figure">
-          <div class="hero-image-wrap"><img id="hero-image" src="assets/hero-our-trip.webp" alt="루자쭈이의 고층 빌딩을 배경으로 함께 찍은 인권과 연주" width="1500" height="1000" fetchpriority="high"><div class="image-index"><span>OUR<br>CHAPTER</span><strong>01 / 上海</strong></div></div>
-          <figcaption><span id="hero-caption">루자쭈이에서 함께.</span><a id="hero-credit" target="_blank" rel="noopener noreferrer"></a></figcaption>
+        <figure class="feature-cover-image">
+          <img id="hero-image" src="assets/hero-our-trip.webp" alt="루자쭈이의 고층 빌딩을 배경으로 함께 찍은 인권과 연주" width="1500" height="1000" fetchpriority="high">
+          <figcaption><span id="hero-caption">루자쭈이에서 함께 · 10.28</span><a id="hero-credit" target="_blank" rel="noopener noreferrer"></a></figcaption>
         </figure>
       </div>
-      <div class="trip-facts"><div><span>OUR BASE</span><strong>소피텔 상하이 홍차오</strong></div><div><span>OUR CURIOSITY</span><strong>City views, Hanfu & old lanes</strong></div><div><span>OUR PACE</span><strong>낮에도 밤에도, 천천히 걸으며.</strong></div><div class="trip-facts-stamp" aria-hidden="true">WHAT WE<br><b>SAW.</b></div></div>
+      <div class="feature-cover-footer"><span>2026. 10. 27 — 11. 01</span><span>SHANGHAI · 06 STORIES</span></div>
     </section>
-<section id="itinerary" class="section page-width" aria-labelledby="itinerary-title">
-      <div class="section-heading">
-        <div><p class="eyebrow section-number">01 — OUR DAYS</p><h2 id="itinerary-title">상하이 여행일지</h2></div>
-        <div class="section-intro">
-          <p>날짜를 고르면 그날의 일기와 사진을 함께 볼 수 있어요.</p>
-          <a id="after-trip-link" class="text-link" href="#after-trip" hidden>귀국 후 일기 보기 <span aria-hidden="true">↘</span></a>
-          <div class="legend"><span><i class="dot green"></i>체험 가능</span><span><i class="dot blue"></i>관측·관람</span><span><i class="dot amber"></i>확인 필요</span></div>
-        </div>
-      </div>
+    <section id="itinerary" class="section page-width" aria-labelledby="itinerary-title">
+      <header class="feature-section-heading">
+        <div><p class="feature-kicker">THE SHANGHAI ISSUE</p><h2 id="itinerary-title">상하이, 여섯 장면</h2></div>
+        <a id="after-trip-link" class="text-link" href="#after-trip" hidden>에필로그 읽기 <span aria-hidden="true">↘</span></a>
+      </header>
+      <p class="feature-opening">첫날에는 낯선 도시에서 쓸 지도와 번역 도구부터 챙겼다. 이튿날 전망대에서 내려다본 황푸강은 저녁이 되자 건너편 불빛을 비추었고, 예원에서는 낮에 찍은 누각을 밤에 한 번 더 찍었다. 엽서를 부친 날에는 신톈디를 걸어 저녁 공연을 보러 갔다. 시내에서 보낸 마지막 밤, 골목과 카페를 지나 숙소로 돌아온 시각은 밤 11시였다.</p>
       <p id="dining-policy" class="dining-policy" hidden>일반 식사는 예약·좌석 확인을 먼저 하고, 15분 이상 대기하면 가까운 대안으로 바꿔요. 실시간 대기와 예약 확정 정보는 아니에요.</p>
-      <div class="day-tabs" id="day-tabs" role="tablist" aria-label="여행 날짜 선택"></div>
+      <div class="day-tabs feature-index" id="day-tabs" role="tablist" aria-label="여행 특집 차례"></div>
       <div id="day-panel" class="day-panel" role="tabpanel" tabindex="0"></div>
       <details id="after-trip" class="day-more after-trip" hidden>
-        <summary>여행을 돌아보며 · 귀국 후 일기</summary>
+        <summary>에필로그 · 돌아와서 남은 이야기</summary>
         <div id="after-trip-entries" class="day-more-body"></div>
       </details>
       <div class="all-days" hidden><div class="subsection-label"><span>THE WHOLE JOURNEY</span><span>6일의 흐름 한눈에 보기</span></div><div id="day-overview"></div></div>
@@ -98,7 +92,7 @@
       <div class="page-width"><div class="section-heading"><div><p class="eyebrow section-number">02 — NEXT TIME</p><h2 id="experiences-title">이번엔 못 갔지만,<br>다음에.</h2></div><div class="section-intro"><p>출발 전에 조사했지만 일정이 바뀌어 가지 못한 곳이에요.<br>아래 조건은 당시 조사 내용입니다.</p><a class="text-link video-section-jump" href="#video-places">영상 속 여행 후보 보기 ↘</a><span class="edition-label">A FIELD GUIDE TO SHANGHAI</span></div></div><div id="experience-grid" class="experience-grid"></div><div class="experience-footnote"><span aria-hidden="true">↗</span><p>상설 매장이라도 시연과 체험 방식은 당일 달라질 수 있어요. <strong>확인 필요</strong> 표시는 방문 전 다시 확인할 항목이에요.</p></div></div>
     </section></div></details></div></details><details id="pocket-guide" class="guide-group"><summary><span><strong>중문 메모·확인 자료</strong><small>기사님께 보여줄 문장 · 출처</small></span><i aria-hidden="true">＋</i></summary><div class="guide-body"><section class="section page-width practical-section" aria-labelledby="practical-title"><div class="section-heading compact"><div><p class="eyebrow section-number">THE POCKET NOTES</p><h2 id="practical-title">필요할 때, 바로 꺼내보기.</h2></div></div><div id="practical-grid" class="practical-grid"></div><details class="sources"><summary><span>자료 출처와 확인 기록</span><span aria-hidden="true">＋</span></summary><div class="sources-inner"><p class="source-note" id="source-note">다녀온 기록입니다. 영업시간·체험 운영·예약 조건은 여행 당시 기준이라 달라졌을 수 있어요.</p><ol id="source-list"></ol></div></details></section></div></details></section>
 </main>
-  <footer class="site-footer page-width"><div><span class="footer-wordmark">SHANGHAI ’26</span><span>두 사람의 여행 노트</span></div><a href="#top">다시, 첫 장면으로 <span aria-hidden="true">↑</span></a><p>Small discoveries. A new perspective.</p></footer>
+  <footer class="site-footer page-width"><div><span class="footer-wordmark">SHANGHAI ’26</span><span>상하이 여행 특집</span></div><a href="#top">표지로 돌아가기 <span aria-hidden="true">↑</span></a><p>2026. 10. 27 — 11. 01</p></footer>
   <dialog id="photo-viewer" class="photo-viewer" aria-labelledby="photo-viewer-title">
     <div class="photo-viewer-content">
       <header class="photo-viewer-header">
